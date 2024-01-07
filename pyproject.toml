@@ -9,7 +9,14 @@ readme = "README.md"
 python = "^3.9"
 requests = "^2.31.0"
 lxml = "^4.9.3"
+selenium = "^4.16.0"
+pandas = "^2.1.4"
 
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.4"
+pytest-cov = "^4.1.0"
+codecov = "^2.1.13"
 
 [build-system]
 requires = ["poetry-core"]
