@@ -51,4 +51,4 @@ def crawl(
         return data.to_dict(orient="records")
 
 if __name__ == "__main__":
-    print(crawl("krepsinis", return_format="csv", time_limit=10, search_word = "rytas"))
+    print(crawl("krepsinis", return_format="csv", time_limit=10, search_word = "žalgir"))

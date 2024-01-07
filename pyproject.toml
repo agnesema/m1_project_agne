@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "m1-project-agne"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["agnesema <sanara44@yahoo.com>"]
 readme = "README.md"
