@@ -36,19 +36,19 @@ def search_in_articles(data, target_word):
 
     return matching_articles
 
-def crawl_krepsinis(base_url: str, time_limit: int = 60, search_word: str or None = None):
+def crawl_krepsinis(base_url = "https://www.krepsinis.net", time_limit: int = 60, search_word: str or None = None):
     """
     Crawls the 'https://www.krepsinis.net/' webpage, extracting articles with scrolling.
 
     Args:
-        base_url (str): The base URL used to construct complete URLs.
+        base_url (str, optional): The base URL used to construct complete URLs. Default is "https://www.krepsinis.net".
         time_limit (int, optional): The maximum time in seconds allowed for the function to run. Default is 60 seconds.
         search_word (str or None, optional): A word to search for in article titles. If provided, only articles containing
             the specified word will be included in the result. Default is None.
 
     Returns:
-        List[Dict[str, Union[str, List[str]]]]: A list of dictionaries where each dictionary represents an article.
-            Each dictionary has "title" as a string, "url" as a string, and "image" as a string representing the URL
+        pd.DataFrame: A DataFrame where each row represents an article.
+            The DataFrame has "title" as a string, "url" as a string, and "image" as a string representing the URL
             of the corresponding image.
 
     Raises:
