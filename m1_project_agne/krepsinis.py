@@ -1,12 +1,12 @@
 from lxml.etree import HTML
 from requests import get
-import csv
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+import pandas as pd
 
 base_url = "https://www.krepsinis.net"
 response = get(base_url)
@@ -95,9 +95,9 @@ def crawl_krepsinis(base_url: str, time_limit: int = 60, search_word: str or Non
                 raise ValueError("Error extracting title or URL for an article.")
 
         if search_word is not None:
-            return search_in_articles(article_data, search_word)
+            return pd.DataFrame(search_in_articles(article_data, search_word))
         else:
-            return article_data
+            return pd.DataFrame(article_data)
 
     except Exception as e:
         raise ValueError(f"Error during extraction: {e}")
@@ -107,28 +107,3 @@ def crawl_krepsinis(base_url: str, time_limit: int = 60, search_word: str or Non
 
 
 
-def write_data_to_csv(data: dict, filename: str) -> None:
-    """
-       Write a list of dictionaries to a CSV file.
-
-       Args:
-           data (List[Dict[str, str]]): A list of dictionaries where each dictionary represents a data row.
-                                        The keys are the field names, and the values are the corresponding values.
-           filename (str): The name of the CSV file to be created.
-
-       Returns:
-           None: This function does not return a value.
-
-       Raises:
-           ValueError: If the 'data' list is empty.
-       """
-    if not data:
-        raise ValueError("No data to write.")
-
-    csv_file = filename + ".csv"
-    fieldnames = list(data[0].keys())
-
-    with open(csv_file, mode='w', encoding='utf-8', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(data)

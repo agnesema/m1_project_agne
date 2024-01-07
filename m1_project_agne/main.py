@@ -1,32 +1,34 @@
-from io import StringIO
 from m1_project_agne import krepsinis
+from io import StringIO
+from typing import Any, Callable, Literal
+import pandas as pd
 
 
-def crawl():
-    base_url = "https://www.krepsinis.net"
-    time_limit_seconds = 60
-    query = "žalgir"
 
-    try:
-        articles_data = krepsinis.crawl_krepsinis(base_url, time_limit_seconds, query)
-        krepsinis.write_data_to_csv(articles_data, "articles1")
-    except ValueError as e:
-        print(f"Error: {e}")
+CRAWLERS: dict[str, Callable[..., pd.DataFrame]] = {
+    "krepsinis": krepsinis.crawl_krepsinis,
+}
+
+def crawl(
+    source: Literal["krepsinis"],
+    return_format: Literal["csv", "df", "records"] = "csv",
+    **kwargs,
+) -> pd.DataFrame or str or list[dict[str, Any]]:
+
+    if source not in CRAWLERS:
+        raise ValueError(f"Source '{source}' is not supported.")
+
+    data = CRAWLERS[source](**kwargs)
+
+    if return_format == "df":
+        return data
+    elif return_format == "csv":
+        with StringIO() as out:
+            data.to_csv(out)
+            content = out.getvalue()
+        return content
+    elif return_format == "records":
+        return data.to_dict(orient="records")
 
 if __name__ == "__main__":
-    crawl()
-
-# if __name__ == "__main__":
-#     #scoreboard_data = basketball_results(tree)
-#     #article_data = extract_articles_data (tree, base_url)
-#     #search_results = search_in_articles(article_data, 'ryt')
-#     #write_data_to_csv(article_data, "articles")
-#     #write_data_to_csv(scoreboard_data, "results3")
-#     #write_data_to_csv(search_results, "search")
-#     time_limit_seconds = 5
-#
-#     articles_data = extract_articles_data(base_url, time_limit_seconds, "Žalgir")
-#     #images_data = extract_article_images(webdriver.Chrome, articles_data)
-#     write_data_to_csv(articles_data, "articles3")
-#
-#     #print(images_data)
+    print(crawl("krepsinis", return_format="csv_file",base_url="https://www.krepsinis.net", time_limit=2))
